@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Wstaw tutaj swój klucz API z OpenWeather
-const API_KEY = "7398b731feced0b6ba14bf1800a38882";
+const API_KEY = process.env.OPENWEATHER_API_KEY;
 
 app.get("/weather.action", async (req, res) => {
     try {
