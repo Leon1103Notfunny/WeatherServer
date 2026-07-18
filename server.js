@@ -9,9 +9,9 @@ const API_KEY = process.env.OPENWEATHER_API_KEY;
 
 app.get("/weather.action", async (req, res) => {
     try {
-        // Domyślnie Gdynia
-        const lat = 54.5189;
-        const lon = 18.5305;
+        // Pobierz współrzędne z aplikacji
+        const lat = req.query.lat || 54.5189;
+        const lon = req.query.lng || 18.5305;
 
         const response = await axios.get(
             "https://api.openweathermap.org/data/2.5/weather",
@@ -30,33 +30,37 @@ app.get("/weather.action", async (req, res) => {
 
         // Mapowanie ikon OpenWeather -> kody AccuWeather
         const iconMap = {
-            "01d": "1",   // bezchmurnie
-            "01n": "33",  // bezchmurna noc
-            "02d": "6",   // małe zachmurzenie
+            "01d": "1",
+            "01n": "33",
+            "02d": "6",
             "02n": "35",
             "03d": "7",
             "03n": "36",
-            "04d": "8",   // duże zachmurzenie
+            "04d": "8",
             "04n": "8",
-            "09d": "12",  // deszcz
+            "09d": "12",
             "09n": "12",
             "10d": "13",
             "10n": "13",
-            "11d": "15",  // burza
+            "11d": "15",
             "11n": "15",
-            "13d": "19",  // śnieg
+            "13d": "19",
             "13n": "19",
-            "50d": "11",  // mgła
+            "50d": "11",
             "50n": "11"
         };
 
-        const weatherCode = iconMap[w.weather[0].icon] || "8";
+        // Normalne mapowanie
+        const mappedCode = iconMap[w.weather[0].icon] || "8";
+
+        // TEST: wymuś śnieg
+        const weatherCode = "19";
 
         const sunrise = new Date(w.sys.sunrise * 1000);
         const sunset = new Date(w.sys.sunset * 1000);
 
         res.json({
-            weather: w.weather[0].description,
+            weather: "TEST SNOW",
             temperature: Math.round(w.main.temp).toString(),
             weatherIcon: weatherCode,
             cityName: w.name,
